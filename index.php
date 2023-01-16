@@ -9,7 +9,7 @@
 </head>
 <body>
 	<header>
-		<h1>Birdnest NFZ violations</h1>
+		<h1>Birdnest NDZ violations</h1>
 		<nav>
 			<a title="View source code in github" href="https://github.com/kmoilane/birdnest" target="_blank"><img src="./github-mark.png" alt="Github"></a>
 			<a title="Link to my linkedin" href="https://linkedin.com/in/kmoilane" target="_blank"><img src="./linkedin_icon.png" alt="Linkedin"></a>
@@ -52,7 +52,7 @@
 						Closest distance: <span class="alerting">${closestDist}</span> meters
 					</p>
 				</div>
-				<div title="Visualization of the closest distance. Circle is NFZ, white dot in the middle is nest and red dot is the drone location." class="nfz-map">
+				<div title="Visualization of the closest distance. Circle is NDZ, white dot in the middle is nest and red dot is the drones location." class="nfz-map">
 					<div class="birdnest"></div>
 					<div class="violation-point" style="left:${closestX}px;bottom:${closestY}px;"></div>
 				</div>
