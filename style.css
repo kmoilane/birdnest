@@ -23,7 +23,7 @@ header {
     height: 100px;
     width: 100%;
     padding-block: 20px;
-    background-image: url("default-bg.jpg");
+    background-image: url("./img/default-bg.jpg");
     -webkit-box-shadow: 0 4px 6px -6px #222;
     -moz-box-shadow: 0 4px 6px -6px #222;
     box-shadow: 0 4px 6px -6px #222;
@@ -85,7 +85,7 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url("birdnest02.png");
+    background-image: url("./img/birdnest02.png");
     background-size: 100%;
     background-repeat: no-repeat;
     background-position: bottom;
@@ -105,7 +105,7 @@ main {
     box-shadow: 0 4px 6px -6px #222;
     color: rgb(23, 24, 26);
     hyphens: auto;
-    background-image: url("default-bg.jpg");
+    background-image: url("./img/default-bg.jpg");
     background-size: 120%;
 }
 

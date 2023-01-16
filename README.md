@@ -5,7 +5,7 @@
 ## what, why, how?
 
 This is a pre-assignment project for the Reaktor's Developer Trainee, summer 2023 position.<br>
-It's a fullstack web application, that displays a list, or in my case cards of drone pilots, who violated the no fly zone/no drone zone in the last 10 minutes. Drone and pilot data are fetched from endpoints provided by Reaktor. New violations will popup asynchronously, and old ones will be removed in the same manner.<br>
+It's a fullstack web application, that displays a list, or in my case cards of drone pilots, who violated the no fly zone/no drone zone in the last 10 minutes. Drone and pilot data are fetched from endpoints provided by Reaktor. New violations are added asynchronously, and old ones are removed in the same manner.<br>
 
 I used HTML/CSS/JS for the frontend, PHP for the backend, and MySQL for the database. Development was done on windows wampserver, and the deployed application is running on linux server. I'm currently learning MERN stack, but decided to do this project with the stack that I'm more familiar with (WAMP/LAMP).<br>
 
@@ -13,7 +13,7 @@ The full subject can be found <a href="https://assignments.reaktor.com/birdnest/
 
 And the deployed app can be viewed live at <a href="https://kmoilane.com/birdnest" target="_blank">kmoilane.com/birdnest</a>.
 
-I have set up a cronjob at my server which checks if api_caller.php is running and if not, it will run it. In api_caller.php there's an infinite loop that runs every 2 seconds, that gets the new snapshots of the drones, and handles the data received. This script keeps my database up to date, so that when ever someone enters the website, there will be up to date data from the last 10 minutes.
+I have set up a cronjob at my server which checks every 5 minutes if api_caller.php is running and if not, runs it. In api_caller.php there's an infinite loop that runs every 2 seconds, that gets the new snapshots of the drones, and handles the data received. This script keeps my database up to date, so even if no one has been on the site for a while, and someone enters the website, there will be up-to-date data from the last 10 minutes.
 
 ## Objective (briefly)
 

@@ -1,10 +1,13 @@
 <?php
+/*
+** This php script should be running on the server, when the application is deployed. Otherwise database is not updated.
+*/
+
 include_once "app/models/Violations.php";
 print("Fetching data from API\n");
 
 /*
-** Since we want to keep our database up to date and actually show every violtaion from the last 10 minutes,
-** we will loop these functions every 2 seconds even if no client is open.
+** New snapshots come to the endpoint every 2 seconds, so we will loop it every 2 seconds.
 */
 
 while (true)
