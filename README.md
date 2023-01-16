@@ -1,5 +1,6 @@
 # birdnest
 
+<img src="birdnest02.png" alt="birdnest img by dalle-2">
 This is pre-assignment project for the Reaktor's Developer Trainee, summer 2023 position.
 I used HTML/CSS/JS for the frontend, PHP for the backend, and MySQL for the database.
 
