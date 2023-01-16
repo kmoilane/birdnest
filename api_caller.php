@@ -2,6 +2,11 @@
 include_once "app/models/Violations.php";
 print("Fetching data from API\n");
 
+/*
+** Since we want to keep our database up to date and actually show every violtaion from the last 10 minutes,
+** we will loop these functions every 2 seconds even if no client is open.
+*/
+
 while (true)
 {
     getSnapshots();
@@ -24,9 +29,9 @@ function calculateDistance($droneX, $droneY)
 }
 
 /*
-** Calls Reaktors pilot API to get the JSON data of a pilot with given drone serial number.
+** Gets pilot data from Reaktors pilot endpoint in a JSON format.
 ** This function is only called when someone violated the no fly zone.
-** If call fails, we try again in 200ms, to make sure no violators slip between our fingers.
+** If call fails, we try again in 200ms.
 */
 
 function getPilotData($droneSerialNumber)
@@ -45,23 +50,41 @@ function getPilotData($droneSerialNumber)
 
 		return($pilotData);
 	}
-	
+
 	return null;
 }
 
 /*
-** 
+** Handles drone violations, by either updating the closest distance, last seen time or adds a new violation.
+** Also deletes violations that are older than 10 minutes, because we don't want to keep them.
 */
 
-function handleViolation($data, $Violation)
+function handleViolation($drone, $dist)
 {
-	$violation = $Violation->checkViolation($data["droneSNo"]);
-
-	if ($violation === false)
+	$Violation = new Violations();
+	
+	if ($pilotData = $Violation->checkViolation($drone->serialNumber))
 	{
+		if ($dist < $pilotData->closest_distance)
+			$Violation->updateViolationDistance(
+				$drone->serialNumber, $dist, $drone->positionX, $drone->positionY);
+		else
+			$Violation->updateViolationTime($drone->serialNumber);
+	}
+		
+	else if (!is_null($pilotData = getPilotData($drone->serialNumber)))
+	{
+		$data = [
+			"droneSNo"      =>  $drone->serialNumber,
+			"pilotFname"    =>  $pilotData["firstName"],
+			"pilotLname"    =>  $pilotData["lastName"],
+			"pilotEmail"    =>  $pilotData["email"],
+			"pilotPhone"    =>  $pilotData["phoneNumber"],
+			"distance"      =>  $dist,
+			"positionX"     =>  $drone->positionX,
+			"positionY"     =>  $drone->positionY
+		];
 		$Violation->addViolation($data);
-		$Violation->deleteOldViolations();
-		return;
 	}
 
 	$Violation->deleteOldViolations();
@@ -69,45 +92,17 @@ function handleViolation($data, $Violation)
 
 /*
 ** parseDrones function loops through the snapshot data and looks for drones that flew too close to the nest.
-** It either calls a function to: A) update the closest distance to the nest, B) update the time of the last violation,
-** C) add a new violation to the database.
 */
 
 function parseDrones($snapshot)
 {
-    $Violation = new Violations();
 	foreach ($snapshot->capture->drone as $drone)
 	{
 		$dist = calculateDistance($drone->positionX, $drone->positionY);
 
-		if ($dist > 100000 || $drone->serialNumber == NULL)
-			continue;
-
-        if ($pilotData = $Violation->checkViolation($drone->serialNumber))
-		{
-            if ($dist < $pilotData->closest_distance)
-		        $Violation->updateViolationDistance(
-                    $drone->serialNumber, $dist, $drone->positionX, $drone->positionY);
-            else
-                $Violation->updateViolationTime($drone->serialNumber);
-        }
-		    
-		else if (!is_null($pilotData = getPilotData($drone->serialNumber)))
-		{
-			$data = [
-				"droneSNo"      =>  $drone->serialNumber,
-				"pilotFname"    =>  $pilotData["firstName"],
-				"pilotLname"    =>  $pilotData["lastName"],
-				"pilotEmail"    =>  $pilotData["email"],
-				"pilotPhone"    =>  $pilotData["phoneNumber"],
-				"distance"      =>  $dist,
-                "positionX"     =>  $drone->positionX,
-                "positionY"     =>  $drone->positionY
-			];
-			handleViolation($data, $Violation);
-		}
+		if ($dist <= 100000 && $drone->serialNumber !== NULL)
+			handleViolation($drone, $dist);
 	}
-	$Violation->deleteOldViolations();
 }
 
 /*
