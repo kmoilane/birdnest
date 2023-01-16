@@ -8,29 +8,44 @@ while (true)
     sleep(2);
 }
 
-function calculateDistance($positionX, $positionY)
+/*
+** Calculates the Euclidean distance between the nest and the drone using The Pythagorean theorem.
+** This is used to find drones that flew too close to the birdnest.
+*/
+
+function calculateDistance($droneX, $droneY)
 {
-	$centerX = 250000;
-	$centerY = 250000;
+	$nestX = 250000;
+	$nestY = 250000;
 	$distance = 0;
 
-	$distance = sqrt(pow($positionX - $centerX, 2) + pow($positionY - $centerY, 2));
+	$distance = sqrt(pow($droneX - $nestX, 2) + pow($droneY - $nestY, 2));
 	return($distance);
 }
 
-function getPilotData($serial_number)
+/*
+** Calls Reaktors pilot API to get the JSON data of a pilot with given drone serial number.
+** This function is only called when someone violated the no fly zone.
+** If call fails, we try again in 200ms, to make sure no violators slip between our fingers.
+*/
+
+function getPilotData($droneSerialNumber)
 {
     do {
-	    $json_data = @file_get_contents('https://assignments.reaktor.com/birdnest/pilots/'.$serial_number, false);
+	    $response = @file_get_contents('https://assignments.reaktor.com/birdnest/pilots/'.$droneSerialNumber, false);
         usleep(2000);
     }
-    while (!$json_data);
-	$pilot_data = json_decode($json_data, true);
+    while (!$response);
+	$pilotData = json_decode($response, true);
 
-	return($pilot_data);
+	return($pilotData);
 }
 
-function logViolation($data, $Violation)
+/*
+** 
+*/
+
+function handleViolation($data, $Violation)
 {
 	$violation = $Violation->checkViolation($data["droneSNo"]);
 
@@ -47,7 +62,7 @@ function logViolation($data, $Violation)
 /*
 ** parseDrones function loops through the snapshot data and looks for drones that flew too close to the nest.
 ** It either calls a function to: A) update the closest distance to the nest, B) update the time of the last violation,
-** C) add a new violation to the database
+** C) add a new violation to the database.
 */
 
 function parseDrones($snapshot)
@@ -81,7 +96,7 @@ function parseDrones($snapshot)
                 "positionX"     =>  $drone->positionX,
                 "positionY"     =>  $drone->positionY
 			];
-			logViolation($data, $Violation);
+			handleViolation($data, $Violation);
 		}
 	}
 	$Violation->deleteOldViolations();
