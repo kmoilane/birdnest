@@ -22,7 +22,7 @@ header {
     align-items: center;
     height: 100px;
     width: 100%;
-    padding-block: 20px;
+    padding: 20px;
     background-image: url("./img/default-bg.jpg");
     -webkit-box-shadow: 0 4px 6px -6px #222;
     -moz-box-shadow: 0 4px 6px -6px #222;
@@ -40,18 +40,20 @@ nav {
 }
 
 nav a img {
-    height: 50px;
+    height: 40px;
     object-fit: contain;
-    margin: 10px;
+    margin: 5px;
 }
 
 header h1 {
     text-align: center;
     text-transform: uppercase;
     color: rgb(0, 0, 0);
-    font-size: 2.25em;
+    font-size: 2em;
+    line-height: 1.25em;
     padding: 0;
     margin: 0;
+    width: 100%;
 }
 
 main {
@@ -175,8 +177,34 @@ main {
     height: 80px;
 }
 
+@media only screen and (max-width: 700px) {
+    header {
+        justify-content: space-evenly;
+    }
+    header h1 {
+        text-align: unset;
+        font-size: 1.75em;
+        padding-right: 20%;
+    }
+    nav a img {
+        height: 40px;
+    }
+}
+
 @media only screen and (max-width: 600px) {
     header h1 {
         font-size: 1.75em;
+    }
+    nav a img {
+        height: 40px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+    nav a img {
+        height: 35px;
     }
 }

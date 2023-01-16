@@ -1,6 +1,6 @@
 # birdnest
 
-<img src="birdnest02.png" alt="birdnest img by dalle-2">
+<img src="img/birdnest02.png" alt="birdnest img by dalle-2">
 
 ## what, why, how?
 
