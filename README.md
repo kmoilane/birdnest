@@ -9,6 +9,9 @@ It's a fullstack web application, that displays a list, or in my case cards of d
 
 I used HTML/CSS/JS for the frontend, PHP for the backend, and MySQL for the database. Development was done on windows wampserver, and the deployed application is running on linux server. I'm currently learning MERN stack, but decided to do this project with the stack that I'm more familiar with (WAMP/LAMP).<br>
 
+PHP version: 8.1.11
+MySQL version: 8.0.21
+
 The full subject can be found <a href="https://assignments.reaktor.com/birdnest/" target="_blank">here</a>.
 
 And the deployed app can be viewed live at <a href="https://kmoilane.com/birdnest" target="_blank">kmoilane.com/birdnest</a>.
