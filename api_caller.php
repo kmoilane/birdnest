@@ -31,14 +31,22 @@ function calculateDistance($droneX, $droneY)
 
 function getPilotData($droneSerialNumber)
 {
-    do {
-	    $response = @file_get_contents('https://assignments.reaktor.com/birdnest/pilots/'.$droneSerialNumber, false);
-        usleep(2000);
-    }
-    while (!$response);
-	$pilotData = json_decode($response, true);
+	$url = "https://assignments.reaktor.com/birdnest/pilots/".$droneSerialNumber;
+	$headers = get_headers($url);
+	$httpCode = substr($headers[0], 9, 3);
+	if ($httpCode != "404")
+	{
+		do {
+			$response = @file_get_contents($url, false);
+			usleep(2000);
+		}
+		while (!$response);
+		$pilotData = json_decode($response, true);
 
-	return($pilotData);
+		return($pilotData);
+	}
+	
+	return null;
 }
 
 /*
