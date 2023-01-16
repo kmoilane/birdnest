@@ -1,6 +1,9 @@
-const violationTable = document.getElementById("violationTable");
-const violationTableBody = document.getElementById("violationTableBody");
 const container = document.getElementsByClassName("container")[0];
+
+/*
+ ** Calculates the relative coordinate in the nfz-map based on the given drone coordinate.
+ ** Needs to be called separately for the X and for Y coordinates.
+ */
 
 function getMapPoint(closest_value) {
     let closestVal = (Number(closest_value) / 2000).toFixed(0);
@@ -10,6 +13,10 @@ function getMapPoint(closest_value) {
         closestVal = 125 + 2 * (Number(closestVal) - 125);
     return closestVal;
 }
+
+/*
+ ** Creates new violation-card element and inserts it to the container in the document
+ */
 
 function addViolation(violation) {
     let closestX = getMapPoint(violation.closest_x);
@@ -36,6 +43,11 @@ function addViolation(violation) {
     container.insertAdjacentHTML("beforeend", newCard);
 }
 
+/*
+ ** Checks if the new distance is closer than the old distance,
+ ** if so, changes the value and the violation point on the map.
+ */
+
 function updateViolation(oldVio, newVio) {
     let oldDist = Number(
         document.querySelector(`#${oldVio.id} .alerting`).innerHTML
@@ -54,11 +66,21 @@ function updateViolation(oldVio, newVio) {
     }
 }
 
+/*
+ ** Loops through all the violations and sees if there is a match based on drone_serial_number
+ ** If there's no match, violation has expired.
+ */
+
 function findMatchingRows(id, violationData) {
     return violationData.find((violation) => {
         return violation.drone_serial_number == id;
     });
 }
+
+/*
+ ** Deletes expired violation-cards. These drones haven't been seen in 10 minutes or longer,
+ ** and therefore are no longer in the database
+ */
 
 function deleteViolations(violationData) {
     const cards = document.getElementsByClassName("violation-card");
@@ -74,15 +96,11 @@ function deleteViolations(violationData) {
     }
 }
 
-/* Parse the violations that are returned from server.
- ** Either remove those rows that are no longer required,
- ** update the changed data inside the row, or add a new
- ** row it doesn't currently exist in the table.
+/*
+ ** Parse the violations that are returned from the server.
  */
-function handleViolation(violationData) {
-    // Loop through violationData fetched from server
+function parseViolations(violationData) {
     for (const violation of violationData) {
-        // Check if there is already matching violation on table using drone serial number id
         const existingViolation = document.getElementById(
             violation.drone_serial_number
         );

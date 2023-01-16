@@ -44,7 +44,7 @@
                     cache: false,
                 })
                     .done(function (violations) {
-                        handleViolation(violations);
+                        parseViolations(violations);
                     })
                     .fail(function (error) {
                         console.log("error => ", error);
