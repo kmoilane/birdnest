@@ -3,9 +3,24 @@
 This is pre-assignment project for the Reaktor's Developer Trainee, summer 2023 position.
 I used HTML/CSS/JS for the frontend, PHP for the backend, and MySQL for the database.
 
-The full subject can be found <a href="https://assignments.reaktor.com/birdnest/" target="_blank">here</a>
+The full subject can be found <a href="https://assignments.reaktor.com/birdnest/" target="_blank">here</a>.
 
-My final version can be viewed live at <a href="https://kmoilane.com/birdnest" target="_blank">kmoilane.com/birdnest</a>
+And the deployed app can be viewed live at <a href="https://kmoilane.com/birdnest" target="_blank">kmoilane.com/birdnest</a>.
 
-Briefly the objective was following:
-Build and deploy a web application which lists all the pilots who recently violated the NDZ perimeter.
+## Objective (briefly)
+
+_"Build and deploy a web application which lists all the pilots who recently violated the NDZ perimeter."_
+
+Now in HTML terms, I don't have a list. I first went with table, but decided to add the visualization of the
+closest confirmed distances, so I ended up with violation cards instead.
+
+### Requirements
+
+-   [x] Persist the pilot information for 10 minutes since their drone was last seen by the equipment
+-   [x] Display the closest confirmed distance to the nest
+-   [x] Contain the pilot name, email address and phone number
+-   [x] Immediately show the information from the last 10 minutes to anyone opening the application
+-   [x] Not require the user to manually refresh the view to see up-to-date information
+-   [x] Develop the application as if it was always operational
+
+-   [x] Visualize the drone positions in some way
