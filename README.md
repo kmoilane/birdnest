@@ -1,8 +1,13 @@
 # birdnest
 
 <img src="birdnest02.png" alt="birdnest img by dalle-2">
-This is pre-assignment project for the Reaktor's Developer Trainee, summer 2023 position.
-I used HTML/CSS/JS for the frontend, PHP for the backend, and MySQL for the database.
+
+## what, why, how?
+
+This is a pre-assignment project for the Reaktor's Developer Trainee, summer 2023 position.<br>
+It's a fullstack web application, that displays a list, or in my case cards of drone pilots, who violated the no fly zone/no drone zone in the last 10 minutes. Drone and pilot data are fetched from endpoints provided by Reaktor. New violations will popup asynchronously, and old ones will be removed in the same manner.<br>
+
+I used HTML/CSS/JS for the frontend, PHP for the backend, and MySQL for the database. Development was done on windows wampserver, and the deployed application is running on linux server. I'm currently learning MERN stack, but decided to do this project with the stack that I'm more familiar with (WAMP/LAMP).<br>
 
 The full subject can be found <a href="https://assignments.reaktor.com/birdnest/" target="_blank">here</a>.
 
@@ -23,5 +28,4 @@ closest confirmed distances, so I ended up with violation cards instead.
 -   [x] Immediately show the information from the last 10 minutes to anyone opening the application
 -   [x] Not require the user to manually refresh the view to see up-to-date information
 -   [x] Develop the application as if it was always operational
-
--   [x] Visualize the drone positions in some way
+-   [x] Visualize the drone positions in some way (not required)
