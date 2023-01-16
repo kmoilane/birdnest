@@ -30,23 +30,29 @@ function getPilotData($serial_number)
 	return($pilot_data);
 }
 
-function logViolation($data, $violationObject)
+function logViolation($data, $Violation)
 {
-	$violation = $violationObject->checkViolation($data["droneSNo"]);
+	$violation = $Violation->checkViolation($data["droneSNo"]);
 
 	if ($violation === false)
 	{
-		$violationObject->addViolation($data);
-		$violationObject->deleteOldViolations();
+		$Violation->addViolation($data);
+		$Violation->deleteOldViolations();
 		return;
 	}
 
-	$violationObject->deleteOldViolations();
+	$Violation->deleteOldViolations();
 }
 
-function parseDrones($snapshot, $violationObject)
+/*
+** parseDrones function loops through the snapshot data and looks for drones that flew too close to the nest.
+** It either calls a function to: A) update the closest distance to the nest, B) update the time of the last violation,
+** C) add a new violation to the database
+*/
+
+function parseDrones($snapshot)
 {
-    $violationObject = new Violations();
+    $Violation = new Violations();
 	foreach ($snapshot->capture->drone as $drone)
 	{
 		$dist = calculateDistance($drone->positionX, $drone->positionY);
@@ -54,12 +60,13 @@ function parseDrones($snapshot, $violationObject)
 		if ($dist > 100000 || $drone->serialNumber == NULL)
 			continue;
 
-        if ($pilotData = $violationObject->checkViolation($drone->serialNumber)) {
+        if ($pilotData = $Violation->checkViolation($drone->serialNumber))
+		{
             if ($dist < $pilotData->closest_distance)
-		        $violationObject->updateViolationDistance(
+		        $Violation->updateViolationDistance(
                     $drone->serialNumber, $dist, $drone->positionX, $drone->positionY);
             else
-                $violationObject->updateViolationTime($drone->serialNumber);
+                $Violation->updateViolationTime($drone->serialNumber);
         }
 		    
 		else if (!is_null($pilotData = getPilotData($drone->serialNumber)))
@@ -74,30 +81,34 @@ function parseDrones($snapshot, $violationObject)
                 "positionX"     =>  $drone->positionX,
                 "positionY"     =>  $drone->positionY
 			];
-			logViolation($data, $violationObject);
+			logViolation($data, $Violation);
 		}
 	}
+	$Violation->deleteOldViolations();
 }
+
+/*
+** Calls with curl to Reaktors drones API which returns XML snapshot of the drones currently in the area.
+** If the response code is 200, and snapshot is successfully aquired, we interpret it into an object, and
+** proceed to parse that data.
+*/
 
 function getSnapshots()
 {
 	$url = "assignments.reaktor.com/birdnest/drones";
 	$curl = curl_init($url);
-
-    $violationObject = new Violations();
 	
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($curl, CURLOPT_HTTPGET, true);
 	
 	$response = curl_exec($curl);	
-	$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+	$httpCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
 	
 	curl_close($curl);
 	
     if ($httpCode == 200)
 	{
-		$snapshot = simplexml_load_string($response);
-		parseDrones($snapshot, $violationObject);
+		$snapshotObject = simplexml_load_string($response);
+		parseDrones($snapshotObject);
 	}
 }
 
