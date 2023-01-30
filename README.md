@@ -12,7 +12,7 @@ I used HTML/CSS/JS for the frontend, PHP for the backend, and MySQL for the data
 PHP version: 8.1.11<br>
 MySQL version: 8.0.21<br>
 
-The birdnest.sql files has the table structure for the violations, but does not provide a command for creating other than the table. If you want to build this yourself, you need to first create a database, and change the app/config/config.php variables accordingly.<br>
+The birdnest.sql file has the table structure for the violations, but does not provide a command for creating other than the table. If you want to build this yourself, you need to first create a database, and change the app/config/config.php variables accordingly.<br>
 
 The full subject can be found <a href="https://assignments.reaktor.com/birdnest/" target="_blank">here</a>.
 
