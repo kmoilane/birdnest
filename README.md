@@ -16,8 +16,6 @@ The birdnest.sql file has the table structure for the violations, but does not p
 
 The full subject can be found <a href="https://assignments.reaktor.com/birdnest/" target="_blank">here</a>.
 
-And the deployed app can be viewed live at <a href="https://kmoilane.com/birdnest" target="_blank">kmoilane.com/birdnest</a>.
-
 I have set up a cronjob at my server which checks every 5 minutes if api_caller.php is running and if not, runs it. In api_caller.php there's an infinite loop that runs every 2 seconds, that gets the new snapshots of the drones, and handles the data received. This script keeps my database up to date, so even if no one has been on the site for a while, and someone enters the website, there will be up-to-date data from the last 10 minutes.
 
 ## Objective (briefly)
